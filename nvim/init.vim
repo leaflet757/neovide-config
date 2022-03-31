@@ -6,9 +6,25 @@ set ruler
 
 " This switches on syntax hilighting. And the hlsearch option tells vim to
 " highlight matches with the last used search pattern. More info in usr_41.txt
-" syntax on
+syntax on
 syntax enable
-" set hlsearch
+set hlsearch
+
+" Show line numbers
+set number
+
+" ============================================================
+
+" let g:neovide_refresh_rate=90
+let g:neovide_transparency=0.9
+
+" Setting g:neovide_no_idle to a boolean value will force neovide to redraw all the time. This can be a quick hack if animations appear to stop too early.
+let g:neovide_no_idle=v:true
+
+let g:neovide_remember_window_size = v:true
+
+" Enables or disables antialiasing of the cursor quad. Disabling may fix some cursor visual issues.
+let g:neovide_cursor_antialiasing=v:true
 
 " ============================================================
 
