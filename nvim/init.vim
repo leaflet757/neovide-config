@@ -1,3 +1,22 @@
+" ============================================================
+" TODO
+" - Preview Window fzf
+" - ignore build files fzf
+"
+"
+"
+"
+"
+"
+"
+" Clang Powertools for VS Studio to gen compile_commands.json
+" https://marketplace.visualstudio.com/items?itemName=caphyon.ClangPowerTools
+"
+" ============================================================
+
+" This should be automatically set if a user vimrc file is found
+set nocompatible
+
 " Display the current cursor position in the lower right of the vim window
 set ruler
 
@@ -14,10 +33,23 @@ set hlsearch
 set number
 
 " Set indentation to 4 spaces
+set tabstop=8
+set softtabstop=0
+set expandtab
 set shiftwidth=4
+set smarttab
+
 
 " trigger `autoread` when files changes on disk
 set autoread
+
+" Scroll bar
+set guioptions=r
+
+set autoindent
+
+set showcmd
+set showmode
 
 " ============================================================
 
@@ -53,10 +85,20 @@ Plug 'scrooloose/nerdtree', { 'on':  'NERDTreeToggle' }
 " Fuzzy File Finding
 Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
 Plug 'junegunn/fzf.vim'
+" Plug 'yuki-yano/fzf-preview.vim', { 'branch': 'release/rpc' }
 
-" Code completion
+" Code completion, intellisense
 " Use release branch (recommend)
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
+
+" VSCode Theme
+Plug 'Mofiqul/vscode.nvim'
+
+" Regex CPP function Highlighting
+Plug 'bfrg/vim-cpp-modern'
+
+" Monokai Pro Highlighting
+"Plug 'sheerun/vim-polyglot'
 
 " Initialize plugin system
 call plug#end()
@@ -78,6 +120,9 @@ set updatetime=300
 
 " Don't pass messages to |ins-completion-menu|.
 set shortmess+=c
+
+" Jump back to defition with C-o
+set tagfunc=CocTagFunc
 
 " Use tab for trigger completion with characters ahead and navigate.
 " NOTE: Use command ':verbose imap <tab>' to make sure tab is not mapped by
@@ -112,6 +157,7 @@ inoremap <silent><expr> <cr> pumvisible() ? coc#_select_confirm()
 
 " GoTo code navigation.
 nmap <silent> gd <Plug>(coc-definition)
+nmap <silent> gD :call CocAction('jumpDefinition', 'vsplit')<CR>
 nmap <silent> gy <Plug>(coc-type-definition)
 nmap <silent> gi <Plug>(coc-implementation)
 nmap <silent> gr <Plug>(coc-references)
@@ -148,25 +194,76 @@ augroup mygroup
 augroup end
 
 " Automatically detect and install extensions
-let g:coc_global_extensions = ['coc-json', 'coc-highlight', 'coc-go', 'coc-clangd']
+let g:coc_global_extensions = ['coc-json', 'coc-highlight', 'coc-go', 'coc-clangd', 'coc-fzf-preview']
 
 " ============================================================
+" Source Control
+
+nmap <leader>c :call CheckoutCurrentFileP4()<CR>
+
+function CheckoutCurrentFileP4()
+  let p4Command = system(['p4', 'edit', expand('%:p')])
+  echo p4Command
+endfunction
+
+" ============================================================
+" Nerd Tree
 
 nnoremap <silent> <C-k><C-B> :NERDTreeToggle<CR>
 
 " ============================================================
+" fzf
 
+nnoremap <silent> fo :Files<CR>
+
+" ============================================================
+" Other Keybinds
+
+nmap <silent> <A-Up> :wincmd k<CR>
+nmap <silent> <A-Down> :wincmd j<CR>
+nmap <silent> <A-Left> :wincmd h<CR>
+nmap <silent> <A-Right> :wincmd l<CR>
+
+" ============================================================
+
+" VSCode Theme
+" For dark theme
+let g:vscode_style = "dark"
+
+" Enable transparent background
+"let g:vscode_transparency = 1
+" Enable italic comment
+"let g:vscode_italic_comment = 1
+" Disable nvim-tree background color
+"let g:vscode_disable_nvimtree_bg = v:true
+colorscheme vscode
+
+" ============================================================
+" vim-cpp-modern
+
+" Disable function highlighting (affects both C and C++ files)
+let g:cpp_function_highlight = 1
+
+" Enable highlighting of C++11 attributes
+let g:cpp_attributes_highlight = 1
+
+" Highlight struct/class member variables (affects both C and C++ files)
+let g:cpp_member_highlight = 1
+
+" Put all standard C and C++ keywords under Vim's highlight group 'Statement'
+" (affects both C and C++ files)
+let g:cpp_simple_highlight = 1
+
+" ============================================================
 " Font settings
-set guifont=Cascadia\ Code\ PL:h14
 
-" Scroll bar
-set guioptions=r
+set guifont=Cascadia\ Mono\ PL:h14
 
 " Enable Monokai Pro From https://github.com/phanviet/cim-monokai-pro
 " Copy monokai_pro.vim into %AppData%/Local/nvim/colors
 set termguicolors
-colorscheme monokai_pro
-let g:lightline = {
-	\ 'colorscheme':'monokai_pro',
-	\ }
+"colorscheme monokai_pro
+" let g:lightline = {
+"	\ 'colorscheme':'monokai_pro',
+"	\ }
 
